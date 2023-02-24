@@ -1,6 +1,7 @@
 import Node from "./node.js";
 import insertionSort from "./arr.js";
 import { removeDuplicates } from "./arr.js";
+import Queue from "./queue.js";
 
 export default class Tree {
     constructor(arr = []) {
@@ -18,8 +19,9 @@ export default class Tree {
 
         return node;
     }
-    
+
     insert(value) {
+        this.arr.push(value);
         this.root = this.insertRec(value ,this.root);
     }
     insertRec(value, root) {
@@ -36,8 +38,21 @@ export default class Tree {
 
         return root;
     }
+
     delete() {}
-    find() {}
+    
+    find(value) {
+        let queue = new Queue();
+        queue.enqueue(this.root);
+        while (!queue.isEmpty()) {
+            let item = queue.dequeue();
+            if (item.data == value) return item;
+            if (item.right != null) queue.enqueue(item.right);
+            if (item.left != null) queue.enqueue(item.left);
+        }
+        return null;
+    }
+    
     levelOrder() {}
     inorder() {}
     preorder() {}
@@ -68,5 +83,7 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 
 let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let newTree = new Tree(arr);
+
+console.log(newTree.find(1))
 
 prettyPrint(newTree.root);
