@@ -39,7 +39,31 @@ export default class Tree {
         return root;
     }
 
-    delete() {}
+    delete(value) {
+        this.root = this.deleteRec(value, this.root)
+    }
+    deleteRec(value, root) {
+        if (root == null) return root;
+
+        if (value < root.data) root.left = this.deleteRec(value, root.left);
+        else if (value > root.data) root.right = this.deleteRec(value, root.right);
+        else {
+            if (root.left == null) return root.right;
+            else if (root.right == null) return root.left;
+
+            root.data = this.minValue(root.right);
+            root.right = this.deleteRec(root.data, root.right);
+        }
+        return root;
+    }
+    minValue(root) {
+        let min = root.data;
+        while (root.left != null) {
+            min = root.left.data;
+            root = root.left;
+        }
+        return min;
+    }
     
     find(value) {
         let queue = new Queue();
@@ -47,12 +71,12 @@ export default class Tree {
         while (!queue.isEmpty()) {
             let item = queue.dequeue();
             if (item.data == value) return item;
-            if (item.right != null) queue.enqueue(item.right);
             if (item.left != null) queue.enqueue(item.left);
+            if (item.right != null) queue.enqueue(item.right);
         }
         return null;
     }
-    
+
     levelOrder() {}
     inorder() {}
     preorder() {}
@@ -84,6 +108,6 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let newTree = new Tree(arr);
 
-console.log(newTree.find(1))
+newTree.delete(4);
 
 prettyPrint(newTree.root);
