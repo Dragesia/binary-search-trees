@@ -77,10 +77,48 @@ export default class Tree {
         return null;
     }
 
-    levelOrder() {}
-    inorder() {}
-    preorder() {}
-    postorder() {}
+    levelOrder(cb) {
+        if (cb == undefined) cb = (i) => i;
+        let arr = [];
+        let queue = new Queue();
+        queue.enqueue(this.root);
+        while (!queue.isEmpty()) {
+            let item = queue.dequeue();
+            if (item == undefined) break;
+            if (item.left != null) queue.enqueue(item.left);
+            if (item.right != null) queue.enqueue(item.right);
+            arr.push(cb(item.data));
+        }
+        return arr;
+    }
+
+    inorder(cb, root = this.root) {
+        if (cb == undefined) cb = (i) => i;
+        if (root == null) return;
+        let arr = [];
+        arr = arr.concat(this.inorder(cb, root.left));
+        arr = [...arr, cb(root.data)];
+        arr = arr.concat(this.inorder(cb, root.right));
+        return arr.filter((el) => el !== undefined);
+    }
+    preorder(cb, root = this.root) {
+        if (cb == undefined) cb = (i) => i;
+        if (root == null) return;
+        let arr = [];
+        arr = [...arr, cb(root.data)];
+        arr = arr.concat(this.preorder(cb, root.left));
+        arr = arr.concat(this.preorder(cb, root.right));
+        return arr.filter((el) => el !== undefined);
+    }
+    postorder(cb, root = this.root) {
+        if (cb == undefined) cb = (i) => i;
+        if (root == null) return;
+        let arr = [];
+        arr = arr.concat(this.postorder(cb, root.left));
+        arr = arr.concat(this.postorder(cb, root.right));
+        arr = [...arr, cb(root.data)];
+        return arr.filter((el) => el !== undefined);
+    }
     height() {}
     depth() {}
     isBalanced() {}
@@ -108,6 +146,6 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let newTree = new Tree(arr);
 
-newTree.delete(4);
+console.log(newTree.levelOrder());
 
 prettyPrint(newTree.root);
