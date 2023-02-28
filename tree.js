@@ -155,28 +155,3 @@ export default class Tree {
     }
 
 }
-
-
-
-
-
-
-/* testing */
-
-const prettyPrint = (node, prefix = '', isLeft = true) => {
-    if (node.right !== null) {
-      prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
-    }
-    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
-    if (node.left !== null) {
-      prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
-    }
-  }
-
-let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
-let newTree = new Tree(arr);
-
-console.log(newTree.root.right.right.right);
-console.log(newTree.depth(newTree.root.right.right.left));
-
-prettyPrint(newTree.root);
