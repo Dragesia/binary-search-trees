@@ -22,3 +22,20 @@ export function removeDuplicates(arr) {
     });
     return uniqueArr;
 }
+
+export function randomArr(len, max = 100) {
+    let arr = [];
+    for (let i=0; i<len; i++) {
+        arr.push(Math.floor(Math.random() * max));
+    }
+    return arr;
+}
+export function prettyPrint(node, prefix = '', isLeft = true) {
+    if (node.right !== null) {
+        prettyPrint(node.right, `${prefix}${isLeft ? '│   ' : '    '}`, false);
+    }
+    console.log(`${prefix}${isLeft ? '└── ' : '┌── '}${node.data}`);
+    if (node.left !== null) {
+        prettyPrint(node.left, `${prefix}${isLeft ? '    ' : '│   '}`, true);
+    }
+}
