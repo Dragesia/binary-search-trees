@@ -21,7 +21,6 @@ export default class Tree {
     }
 
     insert(value) {
-        this.arr.push(value);
         this.root = this.insertRec(value ,this.root);
     }
     insertRec(value, root) {
@@ -119,10 +118,41 @@ export default class Tree {
         arr = [...arr, cb(root.data)];
         return arr.filter((el) => el !== undefined);
     }
-    height() {}
-    depth() {}
-    isBalanced() {}
-    rebalance() {}
+    height(node = this.root) {
+        if (node == null) return 0;
+        const leftHeight = this.height(node.left);
+        const rightHeight = this.height(node.right);
+
+        return leftHeight > rightHeight ? leftHeight + 1 : rightHeight + 1;
+    }
+    depth(node) {
+        let depth = 0;
+        let current = this.root;
+        while (current != null && current.data != node.data ) {
+            if (current.data > node.data) current = current.left;
+            else if (current.data < node.data) current = current.right;
+            depth++;
+        }
+        return depth;
+        
+    }
+    isBalanced() {
+        return Math.abs(this.height(this.root.left) - this.height(this.root.right)) < 2;
+    }
+    rebalance() {
+        let arr = [];
+        let queue = new Queue();
+        queue.enqueue(this.root);
+        while (!queue.isEmpty()) {
+            let item = queue.dequeue();
+            if (item == undefined) break;
+            if (item.left != null) queue.enqueue(item.left);
+            if (item.right != null) queue.enqueue(item.right);
+            arr.push(item.data);
+        }
+        arr = insertionSort(removeDuplicates(arr));
+        this.root = this.buildTree(arr, 0, arr.length-1);
+    }
 
 }
 
@@ -146,6 +176,7 @@ const prettyPrint = (node, prefix = '', isLeft = true) => {
 let arr = [1, 7, 4, 23, 8, 9, 4, 3, 5, 7, 9, 67, 6345, 324];
 let newTree = new Tree(arr);
 
-console.log(newTree.levelOrder());
+console.log(newTree.root.right.right.right);
+console.log(newTree.depth(newTree.root.right.right.left));
 
 prettyPrint(newTree.root);
